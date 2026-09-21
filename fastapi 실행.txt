@@ -1,0 +1,18 @@
+uv run fastapi dev
+
+uvicorn main:app --reload <- 이것도 가능
+
+get : 조회
+post : 삽입
+put : 수정
+patch(일부수정)
+delete : 삭제
+
+라우팅
+/todos/1 => 누가 응답할 것인가?(함수)
+
+main.py => app = FastAPI()
+
+다중 라우팅
+/users/ CRUD
+/items/ CRUD
