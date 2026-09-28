@@ -1,6 +1,6 @@
 from fastapi import FastAPI
-from routes.todo import todo_router
 from fastapi.middleware.cors import CORSMiddleware
+from routers.board_router import board_router
 
 app = FastAPI()
 
@@ -12,13 +12,6 @@ app.add_middleware(
     allow_methods=["*"], # 어떤 메소드를 허용할 것인가? (post, get, put, patch, delete)
     allow_headers=["*"] # 요청에서 사용할 수 있는 헤더정보
 )
-app.include_router(todo_router)
 
-# @app.get("/")
-# def read_root():
-#     return {"Hello": "World"}
-
-# http://127.0.0.1:8000/todos/1
-# @app.get("/todos/{id}")
-# def read_todo(id: int):
-#     return {"id": id}
+# router 설정 - 개별 라우터 생성 후 포함
+app.include_router(board_router, prefix="/boards")
