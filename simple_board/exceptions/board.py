@@ -1,0 +1,3 @@
+class BoardNotFoundException(Exception):
+    pass
+
