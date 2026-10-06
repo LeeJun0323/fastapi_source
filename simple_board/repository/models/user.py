@@ -18,3 +18,5 @@ class User(Base):
     created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.now)
     # user.boards.
     boards: Mapped[list["Board"]] = relationship(back_populates="user")
+    # user.comments
+    comments: Mapped[list["Comment"]] = relationship(back_populates="user")

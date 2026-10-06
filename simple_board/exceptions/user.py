@@ -9,3 +9,6 @@ class InvalidPasswordException(Exception):
 
 class SamePasswordException(Exception):
     pass
+
+class UserCredentialsException(Exception):
+    pass

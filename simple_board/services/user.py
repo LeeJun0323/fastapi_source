@@ -4,7 +4,11 @@ from schemas.user import UserCreate, UserLogin, NameChange, EmailChange, Passwor
 from repository.models.user import User
 from exceptions.user import UserAlreadyExistsException, UserNotFoundException, InvalidPasswordException, SamePasswordException
 from core.security import hash_password, verify_password
+from utils.security import create_access_token
+from schemas.user import Token
 # CRUD 작업
+
+DUMMY_HASH = hash_password("dummypassword")
 
 # 이름 변경
 def update_name(db: Session, data:NameChange, user_id:int):
@@ -30,7 +34,7 @@ def update_email(db: Session, data:EmailChange, user_id:int):
     db.refresh(user)
     return user
 
-# 이메일 변경
+# 비밀번호 변경
 def update_password(db: Session, data:PasswordChange, user_id:int):
     # 수정할 대상 찾기
     user = db.get(User, user_id)
@@ -56,11 +60,16 @@ def authenticate(db: Session, data:UserLogin):
 
     # 회원가입 정보가 없는 경우
     if user is None:
+        # Timing attack 방지
+        verify_password(data.password, DUMMY_HASH)
         raise UserNotFoundException
     # 비밀번호 검증 틀린 경우
     if not verify_password(data.password, user.password):
         raise InvalidPasswordException
-    return user
+
+    access_token = create_access_token(data={"sub": str(user.user_id)})
+
+    return Token(access_token=access_token)
 
 # 회원가입
 # 비밀번호 => 암호화
